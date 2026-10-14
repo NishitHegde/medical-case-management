@@ -91,11 +91,14 @@
 
 <!-- Cases Table Card -->
 <div class="card card-clean overflow-hidden">
-    <div class="card-header bg-white py-3 px-4 border-bottom d-flex justify-content-between align-items-center">
+    <div class="card-header bg-white py-3 px-4 border-bottom d-flex flex-wrap justify-content-between align-items-center gap-2">
         <div class="d-flex align-items-center gap-2">
             <span class="fw-bold text-dark fs-6">Clinical Records</span>
-            <span class="badge bg-light text-secondary border">
-                Showing {{ $cases->count() }} of {{ $cases->total() }}
+            <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 px-2 py-1 small">
+                <i class="bi bi-file-earmark-text me-1"></i> 10 cases per page
+            </span>
+            <span class="badge bg-light text-secondary border px-2 py-1 small">
+                Total: {{ $cases->total() }} cases
             </span>
         </div>
         <div class="small text-muted font-mono">
@@ -229,12 +232,13 @@
 
     <!-- Pagination Footer -->
     @if($cases->hasPages())
-    <div class="card-footer bg-white py-3 px-4 border-top d-flex flex-wrap justify-content-between align-items-center gap-2">
-        <div class="small text-muted">
-            Showing {{ $cases->firstItem() ?? 0 }} to {{ $cases->lastItem() ?? 0 }} of {{ $cases->total() }} cases
+    <div class="card-footer bg-white py-3 px-4 border-top d-flex flex-wrap justify-content-between align-items-center gap-3">
+        <div class="small text-muted d-flex align-items-center gap-2">
+            <span>Showing <strong class="text-dark">{{ $cases->firstItem() ?? 0 }}</strong> to <strong class="text-dark">{{ $cases->lastItem() ?? 0 }}</strong> of <strong class="text-dark">{{ $cases->total() }}</strong> cases</span>
+            <span class="badge bg-light text-secondary border font-mono">10 / page</span>
         </div>
         <div>
-            {{ $cases->links('pagination::bootstrap-5') }}
+            {{ $cases->links('vendor.pagination.bootstrap-5-clean') }}
         </div>
     </div>
     @endif
