@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" data-bs-theme="light">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -7,7 +7,16 @@
 
     <title>@yield('title', 'Case Management') | Jajal Medical Implants</title>
 
-    <!-- Google Fonts: Plus Jakarta Sans -->
+    <!-- Immediate Theme Application Script (Avoids Flicker) -->
+    <script>
+        (function() {
+            const savedTheme = localStorage.getItem('jm-theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            document.documentElement.setAttribute('data-bs-theme', savedTheme);
+            document.documentElement.setAttribute('data-theme', savedTheme);
+        })();
+    </script>
+
+    <!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -17,7 +26,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
     <style>
-        :root {
+        :root, [data-theme="light"], [data-bs-theme="light"] {
             --jm-primary: #0f172a;
             --jm-primary-dark: #020617;
             --jm-accent: #2563eb;
@@ -28,10 +37,43 @@
             --jm-rose: #e11d48;
             --jm-bg: #f8fafc;
             --jm-card-bg: #ffffff;
+            --jm-card-header: #ffffff;
             --jm-border: #e2e8f0;
             --jm-border-subtle: #f1f5f9;
             --jm-text-main: #0f172a;
+            --jm-text-secondary: #334155;
             --jm-text-muted: #64748b;
+            --jm-input-bg: #ffffff;
+            --jm-input-border: #cbd5e1;
+            --jm-table-header-bg: #f8fafc;
+            --jm-table-hover: #f8fafc;
+            --jm-nav-bg: linear-gradient(180deg, #0f172a 0%, #0a0f1d 100%);
+            --jm-footer-bg: #ffffff;
+        }
+
+        [data-theme="dark"], [data-bs-theme="dark"] {
+            --jm-primary: #38bdf8;
+            --jm-primary-dark: #0284c7;
+            --jm-accent: #3b82f6;
+            --jm-accent-hover: #60a5fa;
+            --jm-teal: #14b8a6;
+            --jm-emerald: #10b981;
+            --jm-amber: #f59e0b;
+            --jm-rose: #f43f5e;
+            --jm-bg: #0b1120;
+            --jm-card-bg: #151e32;
+            --jm-card-header: #151e32;
+            --jm-border: #22304d;
+            --jm-border-subtle: #1c273e;
+            --jm-text-main: #f8fafc;
+            --jm-text-secondary: #cbd5e1;
+            --jm-text-muted: #94a3b8;
+            --jm-input-bg: #0f172a;
+            --jm-input-border: #2a3a5e;
+            --jm-table-header-bg: #0f172a;
+            --jm-table-hover: #1c273e;
+            --jm-nav-bg: linear-gradient(180deg, #060a13 0%, #0b1120 100%);
+            --jm-footer-bg: #0d1527;
         }
 
         body {
@@ -43,6 +85,7 @@
             flex-direction: column;
             letter-spacing: -0.01em;
             -webkit-font-smoothing: antialiased;
+            transition: background-color 0.25s ease, color 0.25s ease;
         }
 
         .font-mono {
@@ -51,7 +94,7 @@
 
         /* Top Bar & Navbar */
         .navbar-medical {
-            background: linear-gradient(180deg, #0f172a 0%, #0a0f1d 100%);
+            background: var(--jm-nav-bg);
             border-bottom: 1px solid rgba(255, 255, 255, 0.08);
             box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.25);
             padding: 0.75rem 0;
@@ -163,6 +206,22 @@
             border: 1px solid #fde68a;
         }
 
+        [data-theme="dark"] .role-pill-admin {
+            background-color: #450a0a;
+            color: #fca5a5;
+            border: 1px solid #7f1d1d;
+        }
+        [data-theme="dark"] .role-pill-viewer {
+            background-color: #082f49;
+            color: #7dd3fc;
+            border: 1px solid #0369a1;
+        }
+        [data-theme="dark"] .role-pill-engineer {
+            background-color: #451a03;
+            color: #fcd34d;
+            border: 1px solid #78350f;
+        }
+
         /* Status Pills with Glowing Dot */
         .status-pill {
             font-size: 0.75rem;
@@ -200,6 +259,14 @@
         .status-cancelled { background: #fef2f2; color: #b91c1c; border: 1px solid #fecaca; }
         .status-cancelled .dot { background: #ef4444; }
 
+        /* Dark Status Pills */
+        [data-theme="dark"] .status-draft { background: #1e293b; color: #94a3b8; border-color: #334155; }
+        [data-theme="dark"] .status-planning { background: #172554; color: #93c5fd; border-color: #1e40af; }
+        [data-theme="dark"] .status-in-review { background: #451a03; color: #fde047; border-color: #854d0e; }
+        [data-theme="dark"] .status-approved { background: #042f2e; color: #5eead4; border-color: #115e59; }
+        [data-theme="dark"] .status-completed { background: #064e3b; color: #6ee7b7; border-color: #047857; }
+        [data-theme="dark"] .status-cancelled { background: #450a0a; color: #fca5a5; border-color: #991b1b; }
+
         /* Priority Badges */
         .priority-badge {
             font-size: 0.72rem;
@@ -213,9 +280,13 @@
         .priority-medium { background: #fff7ed; color: #c2410c; border: 1px solid #ffedd5; }
         .priority-high { background: #fef2f2; color: #dc2626; border: 1px solid #fee2e2; }
 
+        [data-theme="dark"] .priority-low { background: #1e293b; color: #94a3b8; }
+        [data-theme="dark"] .priority-medium { background: #431407; color: #fdba74; border-color: #7c2d12; }
+        [data-theme="dark"] .priority-high { background: #450a0a; color: #fca5a5; border-color: #991b1b; }
+
         /* Card Elevations & Surface */
         .card-clean {
-            background: #ffffff;
+            background: var(--jm-card-bg);
             border: 1px solid var(--jm-border);
             border-radius: 16px;
             box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04), 0 1px 2px -1px rgba(0, 0, 0, 0.04);
@@ -223,7 +294,7 @@
         }
 
         .card-stat {
-            background: #ffffff;
+            background: var(--jm-card-bg);
             border: 1px solid var(--jm-border);
             border-radius: 16px;
             padding: 1.25rem 1.35rem;
@@ -235,8 +306,8 @@
 
         .card-stat:hover {
             transform: translateY(-2px);
-            box-shadow: 0 12px 24px -6px rgba(15, 23, 42, 0.08);
-            border-color: #cbd5e1;
+            box-shadow: 0 12px 24px -6px rgba(15, 23, 42, 0.12);
+            border-color: var(--jm-accent);
         }
 
         .card-stat-icon {
@@ -247,6 +318,40 @@
             align-items: center;
             justify-content: center;
             font-size: 1.25rem;
+        }
+
+        [data-theme="dark"] .btn-outline-danger {
+            color: #fca5a5;
+            border-color: #7f1d1d;
+        }
+        [data-theme="dark"] .btn-outline-danger:hover {
+            background-color: #450a0a;
+            color: #fecaca;
+        }
+        [data-theme="dark"] .btn-outline-primary {
+            color: #93c5fd;
+            border-color: #1e40af;
+        }
+        [data-theme="dark"] .btn-outline-primary:hover {
+            background-color: #1e3a8a;
+            color: #ffffff;
+        }
+        [data-theme="dark"] .btn-outline-warning {
+            color: #fde047;
+            border-color: #854d0e;
+        }
+        [data-theme="dark"] .btn-outline-warning:hover {
+            background-color: #451a03;
+            color: #fef08a;
+        }
+        [data-theme="dark"] .alert-warning {
+            background-color: #451a03 !important;
+            color: #fde047 !important;
+            border-color: #854d0e !important;
+        }
+        [data-theme="dark"] .alert-warning strong,
+        [data-theme="dark"] .alert-warning h6 {
+            color: #fef08a !important;
         }
 
         /* Buttons */
@@ -269,9 +374,9 @@
         }
 
         .btn-jm-secondary {
-            background: #ffffff;
+            background: var(--jm-card-bg);
             border: 1px solid var(--jm-border);
-            color: #334155;
+            color: var(--jm-text-secondary);
             font-weight: 600;
             padding: 0.55rem 1.15rem;
             border-radius: 10px;
@@ -279,9 +384,9 @@
         }
 
         .btn-jm-secondary:hover {
-            background: #f8fafc;
+            background: var(--jm-table-hover);
             border-color: #cbd5e1;
-            color: #0f172a;
+            color: var(--jm-text-main);
         }
 
         /* Table Styles */
@@ -290,8 +395,8 @@
         }
 
         .table-custom thead th {
-            background: #f8fafc;
-            color: #475569;
+            background: var(--jm-table-header-bg);
+            color: var(--jm-text-muted);
             font-size: 0.78rem;
             font-weight: 700;
             text-transform: uppercase;
@@ -304,22 +409,103 @@
             padding: 0.95rem 1rem;
             vertical-align: middle;
             border-bottom: 1px solid var(--jm-border-subtle);
-            color: #334155;
+            color: var(--jm-text-secondary);
             font-size: 0.88rem;
         }
 
-        .table-custom tbody tr:hover {
-            background-color: #f8fafc;
+        .table-custom tbody tr:hover td {
+            background-color: var(--jm-table-hover);
+        }
+
+        /* Dark Mode Overrides */
+        [data-theme="dark"] .bg-white {
+            background-color: var(--jm-card-bg) !important;
+        }
+        [data-theme="dark"] .bg-light {
+            background-color: #172239 !important;
+            color: var(--jm-text-secondary) !important;
+        }
+        [data-theme="dark"] .border {
+            border-color: var(--jm-border) !important;
+        }
+        [data-theme="dark"] .text-dark {
+            color: #f8fafc !important;
+        }
+        [data-theme="dark"] .text-secondary {
+            color: #cbd5e1 !important;
+        }
+        [data-theme="dark"] .form-control,
+        [data-theme="dark"] .form-select,
+        [data-theme="dark"] .input-group-text {
+            background-color: var(--jm-input-bg) !important;
+            border-color: var(--jm-input-border) !important;
+            color: var(--jm-text-main) !important;
+        }
+        [data-theme="dark"] .form-control:focus,
+        [data-theme="dark"] .form-select:focus {
+            border-color: var(--jm-accent) !important;
+            box-shadow: 0 0 0 0.25rem rgba(37, 99, 235, 0.25);
+        }
+        [data-theme="dark"] .modal-content {
+            background-color: var(--jm-card-bg);
+            border: 1px solid var(--jm-border);
+            color: var(--jm-text-main);
+        }
+        [data-theme="dark"] .modal-footer {
+            background-color: #0e1628 !important;
+            border-top-color: var(--jm-border) !important;
+        }
+        [data-theme="dark"] .dropdown-menu {
+            background-color: #151e32;
+            border: 1px solid var(--jm-border);
+        }
+        [data-theme="dark"] .dropdown-item {
+            color: #cbd5e1;
+        }
+        [data-theme="dark"] .dropdown-item:hover {
+            background-color: #1c273e;
+            color: #ffffff;
+        }
+        [data-theme="dark"] .btn-light {
+            background-color: #1e293b;
+            border-color: var(--jm-border);
+            color: #cbd5e1;
+        }
+        [data-theme="dark"] .btn-light:hover {
+            background-color: #293952;
+            color: #ffffff;
         }
 
         /* Footer */
         .footer-clean {
             margin-top: auto;
-            background: #ffffff;
+            background: var(--jm-footer-bg);
             border-top: 1px solid var(--jm-border);
             padding: 1.25rem 0;
             color: var(--jm-text-muted);
             font-size: 0.85rem;
+        }
+
+        /* Theme Toggle Button */
+        .theme-toggle-pill {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #ffffff;
+            font-size: 0.82rem;
+            font-weight: 600;
+            padding: 0.4rem 0.85rem;
+            border-radius: 30px;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .theme-toggle-pill:hover {
+            background: rgba(255, 255, 255, 0.15);
+            color: #ffffff;
+            border-color: rgba(255, 255, 255, 0.3);
         }
     </style>
     @yield('styles')
@@ -364,7 +550,14 @@
                     @endcan
                 </ul>
 
-                <div class="d-flex align-items-center gap-3">
+                <div class="d-flex align-items-center gap-2 gap-md-3">
+                    <!-- Dark / Light Mode Toggle Button -->
+                    <button type="button" class="theme-toggle-pill" id="themeToggleBtn" onclick="toggleTheme()" title="Switch Light / Dark Theme">
+                        <i class="bi bi-moon-stars-fill text-warning" id="themeIcon"></i>
+                        <span class="d-none d-md-inline" id="themeLabel">Dark Mode</span>
+                    </button>
+
+                    <!-- User Profile Dropdown -->
                     <div class="dropdown">
                         <button class="btn user-dropdown-btn d-flex align-items-center gap-2 dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <span class="user-avatar-circle">
@@ -380,7 +573,7 @@
                         <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 rounded-3 mt-2 p-2" style="min-width: 240px;">
                             <li class="px-3 py-2 border-bottom mb-2">
                                 <div class="small text-muted">Signed in as</div>
-                                <div class="fw-bold text-dark font-mono small">{{ Auth::user()->email }}</div>
+                                <div class="fw-bold font-mono small">{{ Auth::user()->email }}</div>
                                 <div class="mt-1">
                                     <span class="role-pill role-pill-{{ Auth::user()->role }}">
                                         {{ ucfirst(Auth::user()->role) }} Role
@@ -407,6 +600,22 @@
             </div>
         </div>
     </nav>
+    @else
+    <!-- Guest Header with Theme Toggle -->
+    <header class="py-3 px-lg-5 px-3 d-flex justify-content-between align-items-center">
+        <a class="navbar-brand text-dark d-flex align-items-center gap-2 text-decoration-none" href="{{ route('login') }}">
+            <span class="brand-logo-badge" style="width: 32px; height: 32px; font-size: 1rem;">
+                <i class="bi bi-hospital"></i>
+            </span>
+            <span class="fw-bold fs-5 text-dark">Jajal<span class="text-primary">Medical</span></span>
+        </a>
+
+        <!-- Guest Theme Switcher Button -->
+        <button type="button" class="btn btn-sm btn-jm-secondary d-inline-flex align-items-center gap-2 rounded-pill px-3 py-1 shadow-sm" onclick="toggleTheme()" title="Switch Light / Dark Theme">
+            <i class="bi bi-moon-stars-fill text-warning" id="themeIconGuest"></i>
+            <span class="small fw-semibold" id="themeLabelGuest">Dark Mode</span>
+        </button>
+    </header>
     @endauth
 
     <!-- Main Content Container -->
@@ -446,11 +655,11 @@
         <div class="container-fluid px-lg-5 px-3">
             <div class="row align-items-center gy-2">
                 <div class="col-md-6 text-md-start text-center">
-                    <span class="fw-bold text-dark">Jajal Medical</span> &mdash; Patient-Specific Implants & Surgical Lifecycle Platform &copy; {{ date('Y') }}
+                    <span class="fw-bold text-dark">Jajal Medical</span> &mdash; Patient-Specific Implants &amp; Surgical Lifecycle Platform &copy; {{ date('Y') }}
                 </div>
                 <div class="col-md-6 text-md-end text-center d-flex justify-content-md-end justify-content-center align-items-center gap-3">
                     <span class="badge bg-light text-secondary border px-2 py-1 small">
-                        <i class="bi bi-shield-lock-fill text-success me-1"></i> HIPAA & RBAC Enforced
+                        <i class="bi bi-shield-lock-fill text-success me-1"></i> HIPAA &amp; RBAC Enforced
                     </span>
                     <span class="badge bg-light text-secondary border px-2 py-1 small">
                         <i class="bi bi-cpu-fill text-primary me-1"></i> REST API Enabled
@@ -462,6 +671,46 @@
 
     <!-- Bootstrap 5 Bundle JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Dark / Light Theme Controller Script -->
+    <script>
+        function updateThemeUI(theme) {
+            const isDark = (theme === 'dark');
+            const icon = document.getElementById('themeIcon');
+            const label = document.getElementById('themeLabel');
+            const iconGuest = document.getElementById('themeIconGuest');
+            const labelGuest = document.getElementById('themeLabelGuest');
+
+            if (icon) {
+                icon.className = isDark ? 'bi bi-sun-fill text-warning' : 'bi bi-moon-stars-fill text-warning';
+            }
+            if (label) {
+                label.textContent = isDark ? 'Light Mode' : 'Dark Mode';
+            }
+            if (iconGuest) {
+                iconGuest.className = isDark ? 'bi bi-sun-fill text-warning' : 'bi bi-moon-stars-fill text-warning';
+            }
+            if (labelGuest) {
+                labelGuest.textContent = isDark ? 'Light Mode' : 'Dark Mode';
+            }
+        }
+
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+            const newTheme = (currentTheme === 'dark') ? 'light' : 'dark';
+            
+            document.documentElement.setAttribute('data-theme', newTheme);
+            document.documentElement.setAttribute('data-bs-theme', newTheme);
+            localStorage.setItem('jm-theme', newTheme);
+            updateThemeUI(newTheme);
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+            updateThemeUI(currentTheme);
+        });
+    </script>
+
     @yield('scripts')
 </body>
 </html>
